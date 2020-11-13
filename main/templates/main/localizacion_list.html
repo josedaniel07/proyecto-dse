@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+        <h1>LinioExp</h1>
+        <h3>Localizaciones</h3>
+        <ul>
+            {%for localizacion in  object_list%}
+            <li>
+                <a href="{%url 'localizacion-detail' localizacion.pk %}">{{localizacion.distrito}}</a>
+            </li>
+            {%endfor%}
+        </ul>
+        <ul>
+            <li><a href="{% url 'home' %}">Inicio</a></li>
+        </ul>
+{% endblock %}
