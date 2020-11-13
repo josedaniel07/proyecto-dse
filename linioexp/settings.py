@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'storages',
 ]
 
 MIDDLEWARE = [
@@ -131,3 +132,10 @@ EMAIL_HOST = 'smtp.mailtrap.io'
 EMAIL_HOST_USER = '8538954d67b5dd'
 EMAIL_HOST_PASSWORD = '78ed0879f823a1'
 EMAIL_PORT = '2525'
+
+DEFAULT_FILE_STORAGE = 'storages.backends.dropbox.DropBoxStorage'
+DROPBOX_OAUTH2_TOKEN = 'sswevg9EUFsAAAAAAAAAAf5CwJ7cVaAfq804yy89KXub012IIL9SKyD-F1CN-akW'
+
+# Django Heroku
+import django_heroku
+django_heroku.settings(locals())
