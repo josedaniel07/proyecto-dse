@@ -3,6 +3,9 @@
 {% block content %}
     {% if user.is_authenticated %}
     <h3> Hola {{ user.get_username }} </h3>
+    <ul>
+      <li><a href="{% url 'pedido-list' %}">Ver Pedidos</a></li>
+    </ul>
     <p>
       <a href="{% url 'logout' %}">Cierra Sesion</a>
     </p>

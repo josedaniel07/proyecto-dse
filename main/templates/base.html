@@ -11,9 +11,26 @@
     <div class="container">
       <h1 class="title is-1"> Linio Express </h1>
       <hr>
-      <div class="content">
+      <div class="field has-addons">
         <form action="{% url 'product-list' %}" method="get">
-          <input class="input is-rounded" type="text" name="q" placeholder="Busca tu producto...">
+          <p class="control">
+            <span class="select is-rounded">
+              <select name="categoria" id="categoria">
+                <option value="Todo">Todo</option>
+                <option value="Arte y artesanías">Arte y artesanías</option>
+                <option value="Computadoras">Computadoras</option>
+                <option value="Moda">Moda</option>
+                <option value="Belleza y cuidado personal">Belleza y cuidado personal</option>
+                <option value="Salud y bienestar">Salud y bienestar</option>
+                <option value="Deportes">Deportes</option>
+                <option value="Juguetes">Juguetes</option>
+                <option value="Electrodomésticos">Electrodomésticos</option>
+              </select>
+            </span>
+          </p>
+          <p class="control is-expanded">
+            <input class="input is-rounded" type="text"  name=q placeholder="Busca tu producto...">
+          </p>
         </form>
       </div>
       {% block content %}

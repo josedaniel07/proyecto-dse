@@ -27,6 +27,7 @@ class ProductListView(ListView):
     else:
       return Producto.objects.all()
 
+
 class ProductDetailView(DetailView):
   model = Producto
 class ProveedorListView(ListView):
@@ -195,3 +196,12 @@ class CompletePaymentView(View):
     pedido.save()
     messages.success(request, 'Gracias por tu compra! Un repartidor ha sido asignado a tu pedido.')
     return redirect('home')
+
+class PedidosListView(ListView):
+  model = Pedido
+  def get_context_data(self, **kwargs):
+    context = super().get_context_data(**kwargs)
+    user_profile = Profile.objects.get(user=self.request.user)
+    cliente = Cliente.objects.get(user_profile=user_profile)
+    context['pedido'] = Pedido.objects.get(cliente=cliente, estado='EP')
+    return context
