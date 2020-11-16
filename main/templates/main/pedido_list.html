@@ -2,7 +2,13 @@
 {% block content %}
         <h1>LinioExp</h1>
         <h3>Pedidos</h3>
-
+        <ul>
+            {%for pedido in  object_list%}
+            <li>
+                <a>{{Pedido.fecha_creacion}}</a>
+            </li>
+            {%endfor%}
+        </ul>
         <ul>
             <li><a href="{% url 'home' %}">Inicio</a></li>
         </ul>

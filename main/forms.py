@@ -24,6 +24,7 @@ class UserForm(UserCreationForm):
     genero = forms.ChoiceField(choices=GENERO_CHOICES)
     # Cliente attributes
     is_cliente = forms.BooleanField(required=False)
+    RUC = forms.CharField(max_length=11, required=False)
     preferencias = forms.ModelChoiceField(queryset=Categoria.objects.all(), required=False)
     # Colaborador attributes
     is_colaborador = forms.BooleanField(required=False)
@@ -41,6 +42,7 @@ class UserForm(UserCreationForm):
             'estado',
             'genero',
             'is_cliente',
+            'RUC',
             'preferencias',
             'is_colaborador',
             'reputacion',

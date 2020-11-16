@@ -19,12 +19,20 @@
               {% for detalle in detalles %}
                 <li>
                   {{ detalle }}
-                  <a href="{% url 'add-to-cart' product_pk=detalle.producto.pk %}" class="button is-success">
+                  <a href="{% url 'add-to-cart' product_pk=detalle.producto.pk %}" class="button is-success is-rounded">
                     +
                   </a>
-                  <a href="{% url 'remove-from-cart' product_pk=detalle.producto.pk %}" class="button is-danger">
+                  <a href="{% url 'remove-from-cart' product_pk=detalle.producto.pk %}" class="button is-danger is-rounded">
                     -
                   </a>
+                  <a href="{% url 'remove-all-from-cart' product_pk=detalle.producto.pk %}" class="button is-danger is-rounded">
+                    Eliminar
+                  </a>
+                    <label>Cantidad: </label>
+                    {{ detalle.cantidad }}
+                    <label>| Subtotal: </label>
+                  {{ detalle.get_subtotal }}
+                    <label>$</label>
                 </li>
               {% endfor %}
             </ul>

@@ -68,7 +68,8 @@ class RegistrationView(FormView):
     # Create Cliente if needed
     is_cliente = form.cleaned_data['is_cliente']
     if is_cliente:
-      cliente = Cliente.objects.create(user_profile=user_profile)
+      ruc = form.cleaned_data['RUC']
+      cliente = Cliente.objects.create(user_profile=user_profile, RUC=ruc)
       # Handle special attribute
       preferencias = form.cleaned_data['preferencias']
       preferencias_set = Categoria.objects.filter(pk=preferencias.pk)
@@ -140,6 +141,23 @@ class RemoveFromCartView(View):
     # Recarga la página
     return redirect(request.META['HTTP_REFERER'])
 
+class RemoveAllFromCartView(View):
+  def get(self, request, product_pk):
+    # Obten el cliente
+    user_profile = Profile.objects.get(user=request.user)
+    cliente = Cliente.objects.get(user_profile=user_profile)
+    # Obtén el producto que queremos añadir al carrito
+    producto = Producto.objects.get(pk=product_pk)
+    # Obtén/Crea un/el pedido en proceso (EP) del usuario
+    pedido, _ = Pedido.objects.get_or_create(cliente=cliente, estado='EP')
+    # Obtén/Crea un/el detalle de pedido
+    detalle_pedido = DetallePedido.objects.get(
+      producto=producto,
+      pedido=pedido,
+    )
+    detalle_pedido.delete()
+    return redirect(request.META['HTTP_REFERER'])
+
 class PedidoDetailView(DetailView):
   model = Pedido
 
@@ -158,7 +176,7 @@ class PedidoDetailView(DetailView):
 
 class PedidoUpdateView(UpdateView):
   model = Pedido
-  fields = ['localizacion', 'direccion_entrega']
+  fields = ['localizacion', 'direccion_entrega','tipo_comprobante']
   success_url = reverse_lazy('payment')
 
   def form_valid(self, form):
@@ -203,5 +221,7 @@ class PedidosListView(ListView):
     context = super().get_context_data(**kwargs)
     user_profile = Profile.objects.get(user=self.request.user)
     cliente = Cliente.objects.get(user_profile=user_profile)
-    context['pedido'] = Pedido.objects.get(cliente=cliente, estado='EP')
+    context['pedido'] = Pedido.objects.get(cliente=cliente)
     return context
+  def get_queryset(self):
+    return Pedido.objects.filter(cliente__iconatins=object.cliente.user_profile.user.get_username)

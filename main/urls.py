@@ -15,6 +15,7 @@ urlpatterns = [
     path('registro/', views.RegistrationView.as_view(), name='register'),
     path('add_to_cart/<int:product_pk>',views.AddToCartView.as_view(), name='add-to-cart'),
     path('remove_from_cart/<int:product_pk>', views.RemoveFromCartView.as_view(), name='remove-from-cart'),
+    path('remove_all_from_cart/<int:product_pk>', views.RemoveAllFromCartView.as_view(), name='remove-all-from-cart'),
     path('carrito/', views.PedidoDetailView.as_view(), name='pedido-detail'),
     path('checkout/<int:pk>', views.PedidoUpdateView.as_view(), name='pedido-update'),
     path('payment/', views.PaymentView.as_view(), name='payment'),

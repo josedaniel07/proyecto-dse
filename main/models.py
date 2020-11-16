@@ -73,6 +73,7 @@ class Cliente(models.Model):
     user_profile = models.OneToOneField(Profile, on_delete=models.CASCADE)
     # Atributos especificos del Cliente
     preferencias = models.ManyToManyField(to='Categoria')
+    RUC = models.CharField(max_length=11, null=True, blank=True)
     def __str__(self):
         return f'Cliente: {self.user_profile.user.get_username()}'
 
@@ -97,6 +98,14 @@ class Pedido(models.Model):
     estado = models.CharField(max_length=3)
     direccion_entrega = models.CharField(max_length=100, blank=True, null=True)
     tarifa = models.FloatField(blank=True, null=True)
+    ## Opciones de Comprobante de Pago
+    BOLETA = 'Boleta'
+    FACTURA = 'Factura'
+    COMPROBANTES_CHOICES = [
+        (BOLETA, 'Boleta'),
+        (FACTURA, 'Factura')
+    ]
+    tipo_comprobante = models.CharField(max_length=7,choices=COMPROBANTES_CHOICES, default=BOLETA)
 
     def __str__(self):
         return f'{self.cliente} - {self.fecha_creacion} - {self.estado}'
@@ -118,7 +127,7 @@ class DetallePedido(models.Model):
     cantidad = models.IntegerField(blank=True, null=True)
 
     def __str__(self):
-        return f'{self.pedido.id} - {self.cantidad} x {self.producto.nombre}'
+        return f'{self.producto.nombre}'
 
     def get_subtotal(self):
         return self.producto.get_precio_final() * self.cantidad
