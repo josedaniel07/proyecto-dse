@@ -217,11 +217,19 @@ class CompletePaymentView(View):
 
 class PedidosListView(ListView):
   model = Pedido
+
   def get_context_data(self, **kwargs):
     context = super().get_context_data(**kwargs)
+    # Obten el cliente
     user_profile = Profile.objects.get(user=self.request.user)
     cliente = Cliente.objects.get(user_profile=user_profile)
     context['pedido'] = Pedido.objects.get(cliente=cliente)
     return context
+
   def get_queryset(self):
-    return Pedido.objects.filter(cliente__iconatins=object.cliente.user_profile.user.get_username)
+    query = self.get_context_data()
+    if query is not None:
+      object_list = Pedido.objects.filter(cliente__icontains=query)
+      return object_list
+    else:
+      return Pedido.objects.all()
