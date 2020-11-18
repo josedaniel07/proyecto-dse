@@ -21,12 +21,21 @@ class ProductListView(ListView):
 
   def get_queryset(self):
     query = self.request.GET.get('q')
-    if query is not None:
-      object_list = Producto.objects.filter(nombre__icontains=query)
-      return object_list
+    query2 = self.request.GET.get('categoria')
+    if query2 == "9":
+      object_list=Producto.objects.all()
+      if query is not None:
+        object_list=object_list.filter(nombre__icontains=query)
+        return object_list
+      else:
+        return object_list
     else:
-      return Producto.objects.all()
-
+      object_list=Producto.objects.filter(categoria__pk=query2)
+      if query is not None:
+        object_list=object_list.filter(nombre__icontains=query)
+        return object_list
+      else:
+        return object_list
 
 class ProductDetailView(DetailView):
   model = Producto
