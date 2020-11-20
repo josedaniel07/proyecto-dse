@@ -1,14 +1,27 @@
 {% extends "base.html" %}
 {% block content %}
         <h1>LinioExp</h1>
-        <h3>Pedidos</h3>
-        <ul>
-            {%for pedido in  object_list%}
-            <li>
-                <a>{{Pedido.fecha_creacion}}</a>
-            </li>
-            {%endfor%}
-        </ul>
+        {% if user.is_authenticated %}
+            <h3> Hola {{ user.get_username }} </h3>
+            <h3> Pedidos Anteriores </h3>
+            <ul>
+                {%for Pedido in  object_list%}
+                <li>
+                    <a href="{%url 'pedido-cliente' Pedido.pk %}">{{Pedido}}</a>
+                </li>
+                {%endfor%}
+            </ul>
+            {% else %}
+            <h3> Hola para ver tus pedidos debes tener una cuenta de Linio</h3>
+            <div class="container">
+                <div class="columns is-centered">
+                  <div class="column is-half">
+                    <a class="button is-link is-centered" href="{% url 'login' %}">Inicia Sesion</a>
+                    <a class="button is-link" href="{% url 'register' %}">Registrate</a>
+                  </div>
+                </div>
+            </div>
+        {% endif %}
         <ul>
             <li><a href="{% url 'home' %}">Inicio</a></li>
         </ul>

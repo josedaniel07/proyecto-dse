@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+import datetime
 
 # Create your models here.
 class Proveedor(models.Model):
@@ -53,7 +54,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     # Atributos adicionales para el usuario
     documento_identidad = models.CharField(max_length=8)
-    fecha_nacimiento = models.DateField()
+    fecha_nacimiento = models.DateField(blank=True)
     estado = models.CharField(max_length=3)
     ## Opciones de genero
     MASCULINO = 'MA'
@@ -67,6 +68,7 @@ class Profile(models.Model):
     genero = models.CharField(max_length=2, choices=GENERO_CHOICES)
     def __str__(self):
         return self.user.get_username()
+
 
 class Cliente(models.Model):
     # Relacion con el modelo Perfil

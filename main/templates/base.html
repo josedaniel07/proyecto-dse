@@ -17,14 +17,9 @@
             <span class="select is-rounded">
               <select name="categoria" id="categoria">
                 <option value="9">Todo</option>
-                <option value="3">Arte y artesanías</option>
-                <option value="1">Computadoras</option>
-                <option value="4">Moda</option>
-                <option value="5">Belleza y cuidado personal</option>
-                <option value="6">Salud y bienestar</option>
-                <option value="2">Deportes</option>
-                <option value="7">Juguetes</option>
-                <option value="8">Electrodomésticos</option>
+                {% for cat in categorías.all %}
+                <option value="{{cat.pk}}">{{cat.nombre}}</option>
+                {% endfor %}
               </select>
             </span>
           </p>
