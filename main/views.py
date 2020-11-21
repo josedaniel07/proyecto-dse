@@ -18,24 +18,44 @@ class HomePageView(TemplateView):
 
 class ProductListView(ListView):
   model = Producto
-
   def get_queryset(self):
     query = self.request.GET.get('q')
     query2 = self.request.GET.get('categoria')
-    if query2 == "9":
-      object_list=Producto.objects.all()
+    query3 = self.request.GET.get('filtro')
+    if query2 == "abc":
+      object_list=Producto.objects.all().order_by('nombre')
       if query is not None:
-        object_list=object_list.filter(nombre__icontains=query)
-        return object_list
+        object_list=object_list.filter(nombre__icontains=query).order_by('nombre')
+        if query3 == "1":
+          object_list = object_list.filter(nombre__icontains=query).order_by('precio','nombre')
+          return object_list
+        elif query3 == "2":
+          object_list = object_list.filter(nombre__icontains=query).order_by('-precio','nombre')
+          return object_list
       else:
-        return object_list
+        if query3 == "1":
+          object_list = Producto.objects.all().order_by('precio','nombre')
+          return object_list
+        elif query3 == "2":
+          object_list = Producto.objects.all().order_by('-precio','nombre')
+          return object_list
     else:
-      object_list=Producto.objects.filter(categoria__pk=query2)
+      object_list=Producto.objects.filter(categoria__pk=query2).order_by('nombre')
       if query is not None:
-        object_list=object_list.filter(nombre__icontains=query)
-        return object_list
+        object_list=object_list.filter(nombre__icontains=query).order_by('nombre')
+        if query3 == "1":
+          object_list = object_list.order_by('precio','nombre')
+          return object_list
+        elif query3 == "2":
+          object_list = object_list.order_by('-precio', 'nombre')
+          return object_list
       else:
-        return object_list
+        if query3 == "1":
+          object_list = object_list.order_by('precio','nombre')
+          return object_list
+        elif query3 == "2":
+          object_list = object_list.order_by('-precio', 'nombre')
+          return object_list
 
 class ProductDetailView(DetailView):
   model = Producto
@@ -73,9 +93,8 @@ class RegistrationViewCliente(FormView):
     # Create Profile
     documento_identidad = form.cleaned_data['documento_identidad']
     fecha_nacimiento = form.cleaned_data['fecha_nacimiento']
-    estado = form.cleaned_data['estado']
     genero = form.cleaned_data['genero']
-    user_profile = Profile.objects.create(user=user, documento_identidad=documento_identidad, fecha_nacimiento=fecha_nacimiento, estado=estado, genero=genero)
+    user_profile = Profile.objects.create(user=user, documento_identidad=documento_identidad, fecha_nacimiento=fecha_nacimiento, estado="", genero=genero)
     user_profile.save()
     # Create Cliente if needed
     ruc = form.cleaned_data['RUC']
@@ -132,7 +151,7 @@ class AddToCartView(View):
     # Obtén el producto que queremos añadir al carrito
     producto = Producto.objects.get(pk=product_pk)
     # Obtén/Crea un/el pedido en proceso (EP) del usuario
-    pedido, _ = Pedido.objects.get_or_create(cliente=cliente, estado='EP')
+    pedido, _ = Pedido.objects.get_or_create(cliente=cliente, estado='En Proceso')
     # Obtén/Crea un/el detalle de pedido
     detalle_pedido, created = DetallePedido.objects.get_or_create(
       producto=producto,
@@ -159,7 +178,7 @@ class RemoveFromCartView(View):
     # Obtén el producto que queremos añadir al carrito
     producto = Producto.objects.get(pk=product_pk)
     # Obtén/Crea un/el pedido en proceso (EP) del usuario
-    pedido, _ = Pedido.objects.get_or_create(cliente=cliente, estado='EP')
+    pedido, _ = Pedido.objects.get_or_create(cliente=cliente, estado='En Proceso')
     # Obtén/Crea un/el detalle de pedido
     detalle_pedido = DetallePedido.objects.get(
       producto=producto,
@@ -184,7 +203,7 @@ class RemoveAllFromCartView(View):
     # Obtén el producto que queremos añadir al carrito
     producto = Producto.objects.get(pk=product_pk)
     # Obtén/Crea un/el pedido en proceso (EP) del usuario
-    pedido, _ = Pedido.objects.get_or_create(cliente=cliente, estado='EP')
+    pedido, _ = Pedido.objects.get_or_create(cliente=cliente, estado='En Proceso')
     # Obtén/Crea un/el detalle de pedido
     detalle_pedido = DetallePedido.objects.get(
       producto=producto,
@@ -201,7 +220,7 @@ class PedidoDetailView(DetailView):
     user_profile = Profile.objects.get(user=self.request.user)
     cliente = Cliente.objects.get(user_profile=user_profile)
     # Obtén/Crea un/el pedido en proceso (EP) del usuario
-    pedido = Pedido.objects.get(cliente=cliente, estado='EP')
+    pedido = Pedido.objects.get(cliente=cliente, estado='En Proceso')
     return pedido
 
   def get_context_data(self, **kwargs):
@@ -230,7 +249,7 @@ class PaymentView(TemplateView):
     # Obten el cliente
     user_profile = Profile.objects.get(user=self.request.user)
     cliente = Cliente.objects.get(user_profile=user_profile)
-    context['pedido'] = Pedido.objects.get(cliente=cliente, estado='EP')
+    context['pedido'] = Pedido.objects.get(cliente=cliente, estado='En Proceso')
 
     return context
 
@@ -240,9 +259,9 @@ class CompletePaymentView(View):
     user_profile = Profile.objects.get(user=request.user)
     cliente = Cliente.objects.get(user_profile=user_profile)
     # Obtén/Crea un/el pedido en proceso (EP) del usuario
-    pedido = Pedido.objects.get(cliente=cliente, estado='EP')
+    pedido = Pedido.objects.get(cliente=cliente, estado='En Proceso')
     # Cambia el estado del pedido
-    pedido.estado = 'PAG'
+    pedido.estado = 'Pagado'
     # Asignacion de repartidor
     pedido.repartidor = Colaborador.objects.order_by('?').first()
     # Guardamos los cambios

@@ -16,10 +16,18 @@
           <p class="control">
             <span class="select is-rounded">
               <select name="categoria" id="categoria">
-                <option value="9">Todo</option>
+                <option value="abc">Todo</option>
                 {% for cat in categorías.all %}
                 <option value="{{cat.pk}}">{{cat.nombre}}</option>
                 {% endfor %}
+              </select>
+            </span>
+          </p>
+          <p class="control">
+            <span class="select is-rounded">
+              <select name="filtro" id="filtro">
+                <option value="1">Precio menor a mayor</option>
+                <option value="2">Precio mayor a menor</option>
               </select>
             </span>
           </p>

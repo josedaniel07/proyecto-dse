@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-
+<h3><strong> En caso no tenga un RUC no es necesario que lo inserte.</strong></h3>
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}

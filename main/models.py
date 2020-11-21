@@ -55,7 +55,7 @@ class Profile(models.Model):
     # Atributos adicionales para el usuario
     documento_identidad = models.CharField(max_length=8)
     fecha_nacimiento = models.DateField(blank=True)
-    estado = models.CharField(max_length=3)
+    estado = models.CharField(max_length=3, blank=True, null=True)
     ## Opciones de genero
     MASCULINO = 'MA'
     FEMENINO = 'FE'
@@ -97,7 +97,7 @@ class Pedido(models.Model):
     # Atributos
     fecha_creacion = models.DateTimeField(auto_now=True)
     fecha_entrega = models.DateTimeField(blank=True, null=True)
-    estado = models.CharField(max_length=3)
+    estado = models.CharField(max_length=10)
     direccion_entrega = models.CharField(max_length=100, blank=True, null=True)
     tarifa = models.FloatField(blank=True, null=True)
     ## Opciones de Comprobante de Pago
