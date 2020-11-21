@@ -20,8 +20,16 @@
       <li><strong>Precio:</strong> {{ object.precio }} $ </li>
       <li><strong>Descripcion:</strong> {{ object.descripcion }}</li>
       <li><strong>Categoria:</strong> {{ object.categoria.nombre }}</li>
-      <li><strong>Proveedor:</strong> {{ object.proveedor }}</li>
+      <li><strong>Proveedor: </strong><a href="{%url 'proveedor-detail' object.proveedor.pk %}">{{object.proveedor}}</a></li>
     </ul>
+    <div>
+        {% if user.is_authenticated %}
+        {% else %}
+        <li>
+            No puedes agregar productos o ver tu carrito si no te logueas
+        </li>
+        {% endif %}
+    </div>
     <div class="block">
         <a href="{% if user.is_authenticated %} {% url 'add-to-cart' product_pk=object.pk %} {% else %} {% endif %} " class='button {% if user.is_authenticated %} is-primary {% else %} is-danger {% endif %}' >
           Añadir al carrito

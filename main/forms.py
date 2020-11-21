@@ -59,6 +59,7 @@ class ColaboradorUserForm(UserCreationForm):
     # Colaborador attributes
     reputacion = forms.FloatField(required=False)
     cobertura_entrega = forms.ModelChoiceField(queryset=Localizacion.objects.all(), required=False)
+    numero = forms.CharField(max_length=9)
     class Meta:
         model = User
         fields = [
@@ -66,6 +67,7 @@ class ColaboradorUserForm(UserCreationForm):
             'first_name',
             'last_name',
             'email',
+            'numero',
             'documento_identidad',
             'fecha_nacimiento',
             'estado',

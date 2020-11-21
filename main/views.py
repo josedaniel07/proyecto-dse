@@ -18,6 +18,8 @@ class HomePageView(TemplateView):
 
 class ProductListView(ListView):
   model = Producto
+  template_name = 'main/producto_list.html'
+  object_list = Producto.objects.all()
   def get_queryset(self):
     query = self.request.GET.get('q')
     query2 = self.request.GET.get('categoria')
@@ -131,8 +133,9 @@ class RegistrationViewColaborador(FormView):
     user_profile = Profile.objects.create(user=user, documento_identidad=documento_identidad, fecha_nacimiento=fecha_nacimiento, estado=estado, genero=genero)
     user_profile.save()
     # Create Colaborador if needed
+    numero = form.cleaned_data['numero']
     reputacion = form.cleaned_data['reputacion']
-    colaborador = Colaborador.objects.create(user_profile=user_profile, reputacion=reputacion)
+    colaborador = Colaborador.objects.create(user_profile=user_profile, reputacion=reputacion, numero=numero)
     # Handle special attribute
     cobertura_entrega = form.cleaned_data['cobertura_entrega']
     cobertura_entrega_set = Localizacion.objects.filter(pk=cobertura_entrega.pk)
@@ -214,6 +217,7 @@ class RemoveAllFromCartView(View):
 
 class PedidoDetailView(DetailView):
   model = Pedido
+  template_name = 'main/pedido_detail.html'
 
   def get_object(self):
     # Obten el cliente
@@ -283,3 +287,17 @@ class PedidosListView(ListView):
 
 class PedidoCliente(DetailView):
   model = Pedido
+  template_name = 'main/pedido_cliente.html'
+
+class cancelarPedido(View):
+  def get(self, request):
+    # Obten el cliente
+    user_profile = Profile.objects.get(user=request.user)
+    cliente = Cliente.objects.get(user_profile=user_profile)
+    # Obtén/Crea un/el pedido en proceso (EP) del usuario
+    pedido = Pedido.objects.get(cliente=cliente)
+    # Cambia el estado del pedido
+    pedido.estado = 'Cancelado'
+    # Guardamos los cambios
+    pedido.save()
+    return redirect('home')

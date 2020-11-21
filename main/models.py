@@ -85,6 +85,7 @@ class Colaborador(models.Model):
     # Atributos especificos del Colaborador
     reputacion = models.FloatField()
     cobertura_entrega = models.ManyToManyField(to='Localizacion')
+    numero = models.CharField(max_length=9, null=True)
     def __str__(self):
         return f'Colaborador: {self.user_profile.user.get_username()}'
 

@@ -1,17 +1,30 @@
 {% extends "base.html" %}
 {% block content %}
-    <h1> Linio Exp </h1>
     <hr>
-    <h3> {{ object.cliente}} </h3>
+    <h3 class="title"> Pedido con el código: {{ object.pk}} </h3>
     <ul>
-      <li><strong>Repartidor:</strong> {{ object.repartidor }}</li>
-      <li><strong>Razon Social:</strong> {{ object.localizacion.distrito }}</li>
-      <li><strong>Telefono:</strong> {{ object.fecha_creacion }}</li>
-      <li><strong>RUC:</strong> {{ object.fecha_entrega }}</li>
-      <li><strong>Razon Social:</strong> {{ object.estado }}</li>
-      <li><strong>Telefono:</strong> {{ object.dirección_entrega }}</li>
-      <li><strong>RUC:</strong> {{ object.tarifa }}</li>
-      <li><strong>Razon Social:</strong> {{ object.tipo_comprobante }}</li>
+      <li><strong>Repartidor:</strong> {{ object.repartidor.user_profile.user.get_full_name }} </li>
+      <li><strong>Número del Repartidor:</strong> {{ object.repartidor.numero }}</li>
+      <li><strong>Distrito:</strong> {{ object.localizacion.distrito }}</li>
+      <li><strong>Dirección de Entrega:</strong> {{ object.dirección_entrega }}</li>
+      <li><strong>Fecha de Creación:</strong> {{ object.fecha_creacion }}</li>
+      <li><strong>Fecha de Entrega:</strong> {{ object.fecha_entrega }}</li>
+      <li><strong>Estado del Pedido:</strong> {{ object.estado }}</li>
+      <li><strong>Tarifa de envío:</strong> {{ object.tarifa }} $</li>
+      <li><strong>Precio Total del Pedido:</strong> {{ object.get_total }} $</li>
+      <li><strong>Tipo de Comprobante:</strong> {{ object.tipo_comprobante }}</li>
+    </ul>
+    </div>
+    <ul >
+    {% if object.estado == 'Entregado' %}
+        <li>No puedes cancelar un pedido entregado</li>
+    {% elif object.estado == 'Cancelado' %}
+        <li>No puedes cancelar un pedido cancelado</li>
+    {% else %}
+     <a href="{% url 'pedido-cancelado' pedido.pk %}" class="button is-danger is-rounded ">
+     Cancela tu pedido
+     </a>
+    {% endif %}
     </ul>
     <hr>
     <ul>
