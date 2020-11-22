@@ -7,7 +7,7 @@
             <ul>
                 {%for Pedido in  object_list%}
                 <li>
-                    <a href="{%url 'pedido-cliente' Pedido.pk %}">-------{{Pedido.fecha_creacion}},{{Pedido.estado}}</a>
+                    <a href="{%url 'pedido-cliente' Pedido.pk %}">-------{{Pedido.fecha_creacion}} | {{Pedido.estado}}</a>
                 </li>
                 {% empty %}
                 <div class="content">

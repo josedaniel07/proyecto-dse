@@ -100,7 +100,7 @@ class Pedido(models.Model):
     fecha_entrega = models.DateTimeField(blank=True, null=True)
     estado = models.CharField(max_length=10)
     direccion_entrega = models.CharField(max_length=100, blank=True, null=True)
-    tarifa = models.FloatField(blank=True, null=True)
+    tarifa = models.FloatField(blank=True, null=True, default=0)
     ## Opciones de Comprobante de Pago
     BOLETA = 'Boleta'
     FACTURA = 'Factura'

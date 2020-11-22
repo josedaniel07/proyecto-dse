@@ -8,13 +8,21 @@
       <li><strong>Distrito:</strong> {{ object.localizacion.distrito }}</li>
       <li><strong>Dirección de Entrega:</strong> {{ object.dirección_entrega }}</li>
       <li><strong>Fecha de Creación:</strong> {{ object.fecha_creacion }}</li>
-      <li><strong>Fecha de Entrega:</strong> {{ object.fecha_entrega }}</li>
+        {% if object.fecha_entrega is None%}
+            <li><strong>Fecha de Entrega:</strong> Pendiente de entrega</li>
+        {% else %}
+            <li><strong>Fecha de Entrega:</strong> {{ object.fecha_entrega }}</li>
+        {% endif %}
       <li><strong>Estado del Pedido:</strong> {{ object.estado }}</li>
-      <li><strong>Tarifa de envío:</strong> {{ object.tarifa }} $</li>
+        {% if object.tarifa == 0%}
+            <li><strong>Tarifa de envío: </strong> Precio por definir</li>
+        {% else %}
+            <li><strong>Tarifa de envío:</strong> {{ object.tarifa }} $</li>
+        {% endif %}
       <li><strong>Precio Total del Pedido:</strong> {{ object.get_total }} $</li>
       <li><strong>Tipo de Comprobante:</strong> {{ object.tipo_comprobante }}</li>
     </ul>
-    </div>
+&nbsp
     <ul >
     {% if object.estado == 'Entregado' %}
         <li>No puedes cancelar un pedido entregado</li>

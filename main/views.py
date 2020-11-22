@@ -154,7 +154,7 @@ class AddToCartView(View):
     # Obtén el producto que queremos añadir al carrito
     producto = Producto.objects.get(pk=product_pk)
     # Obtén/Crea un/el pedido en proceso (EP) del usuario
-    pedido, _ = Pedido.objects.get_or_create(cliente=cliente, estado='En Proceso')
+    pedido, _ = Pedido.objects.get_or_create(cliente=cliente, estado='En Proceso', tarifa=0)
     # Obtén/Crea un/el detalle de pedido
     detalle_pedido, created = DetallePedido.objects.get_or_create(
       producto=producto,
@@ -295,9 +295,9 @@ class cancelarPedido(View):
     user_profile = Profile.objects.get(user=request.user)
     cliente = Cliente.objects.get(user_profile=user_profile)
     # Obtén/Crea un/el pedido en proceso (EP) del usuario
-    pedido = Pedido.objects.get(cliente=cliente)
+    pedido = Pedido.objects.get(cliente=cliente, pk=object.pk)
     # Cambia el estado del pedido
     pedido.estado = 'Cancelado'
     # Guardamos los cambios
     pedido.save()
-    return redirect('home')
+    return redirect(request.META['HTTP_REFERER'])
