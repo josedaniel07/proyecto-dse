@@ -42,7 +42,7 @@
     {% if object.estado == 'Entregado' %}
         <li>No puedes cancelar un pedido entregado</li>
     {% elif object.estado == 'Cancelado' %}
-        <li>No puedes cancelar un pedido cancelado</li>
+        <li>Recuerde llamar a Atención al Cliente para coordinar el reembolso del pedido.</li>
     {% else %}
      <a href="{% url 'pedido-cancelado' pedido.pk %}" class="button is-danger is-rounded ">
      Cancela tu pedido
@@ -50,6 +50,9 @@
     {% endif %}
     </ul>
     <hr>
+<ul>
+            Atención al cliente: 990154244
+        </ul>
     <ul>
       <li><a href="{% url 'pedido-list' %}">Ver Lista de tus Pedidos</a></li>
       <li><a href="{% url 'home' %}">Inicio</a></li>

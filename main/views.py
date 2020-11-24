@@ -296,12 +296,13 @@ class PedidoCliente(DetailView):
     return context
 
 class cancelarPedido(View):
-  def get(self, request):
+  def get(self, request, pedido_pk):
     # Obten el cliente
     user_profile = Profile.objects.get(user=request.user)
     cliente = Cliente.objects.get(user_profile=user_profile)
-    # Obtén/Crea un/el pedido en proceso (EP) del usuario
-    pedido = Pedido.objects.get(cliente=cliente, pk=14)
+    pedidocod = Pedido.objects.get(pk=pedido_pk)
+    # Obtén el pedido que se queire cancelar
+    pedido = Pedido.objects.get(cliente=cliente, pk=pedidocod.pk)
     # Cambia el estado del pedido
     pedido.estado = 'Cancelado'
     # Guardamos los cambios
