@@ -6,6 +6,7 @@
     <h3> Hola {{ user.get_username }} </h3>
     <ul>
       <li><a href="{% url 'pedido-list' %}">Ver Pedidos</a></li>
+      <li><a href="{% url 'pedido-detail' %}">Ver Carrito</a></li>
     </ul>
     <p>
       <a href="{% url 'logout' %}">Cierra Sesion</a>

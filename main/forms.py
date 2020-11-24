@@ -3,24 +3,6 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from .models import Localizacion, Categoria
 
-from django.utils.deconstruct import deconstructible
-from django.utils.translation import ugettext_lazy as _
-from django.core.validators import BaseValidator
-from datetime import date
-
-def calculate_age(born):
-    today = date.today()
-    return today.year - born.year - \
-           ((today.month, today.day) < (born.month, born.day))
-
-@deconstructible
-class MinAgeValidator(BaseValidator):
-    message = _("Debes ser mayor de 18 para poder registrarte %(limit_value)d.")
-    code = 'min_age'
-
-    def compare(self, a, b):
-        return calculate_age(a) < b
-
 class ClienteUserForm(UserCreationForm):
     # django.contrib.auth.User attributes
     first_name = forms.CharField(max_length=150, required=False)
@@ -28,7 +10,7 @@ class ClienteUserForm(UserCreationForm):
     email = forms.EmailField(max_length=150)
     # Profile attributes
     documento_identidad = forms.CharField(max_length=8)
-    fecha_nacimiento = forms.DateField(validators=[MinAgeValidator(18)])
+    fecha_nacimiento = forms.DateField()
     ## Opciones de genero
     MASCULINO = 'MA'
     FEMENINO = 'FE'
@@ -55,6 +37,8 @@ class ClienteUserForm(UserCreationForm):
             'RUC',
             'preferencias',
         ]
+
+
 class ColaboradorUserForm(UserCreationForm):
     # django.contrib.auth.User attributes
     first_name = forms.CharField(max_length=150, required=False)

@@ -24,6 +24,8 @@ class ProductListView(ListView):
     query = self.request.GET.get('q')
     query2 = self.request.GET.get('categoria')
     query3 = self.request.GET.get('filtro')
+    if query is None and query2 is None and query3 is None:
+      return Producto.objects.all().order_by('nombre')
     if query2 == "abc":
       object_list=Producto.objects.all().order_by('nombre')
       if query is not None:
@@ -295,7 +297,7 @@ class cancelarPedido(View):
     user_profile = Profile.objects.get(user=request.user)
     cliente = Cliente.objects.get(user_profile=user_profile)
     # Obtén/Crea un/el pedido en proceso (EP) del usuario
-    pedido = Pedido.objects.get(cliente=cliente, pk=object.pk)
+    pedido = Pedido.objects.get(cliente=cliente, pk=14)
     # Cambia el estado del pedido
     pedido.estado = 'Cancelado'
     # Guardamos los cambios

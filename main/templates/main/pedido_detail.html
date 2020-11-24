@@ -19,15 +19,20 @@
               {% for detalle in detalles %}
                 <li>
                   {{ detalle }}
+                    &nbsp
                   <a href="{% url 'add-to-cart' product_pk=detalle.producto.pk %}" class="button is-success is-rounded">
                     +
                   </a>
+                    &nbsp
                   <a href="{% url 'remove-from-cart' product_pk=detalle.producto.pk %}" class="button is-danger is-rounded">
                     -
                   </a>
+                    &nbsp
                   <a href="{% url 'remove-all-from-cart' product_pk=detalle.producto.pk %}" class="button is-danger is-rounded">
                     Eliminar
                   </a>
+                    &nbsp
+                    &nbsp
                     <label>Cantidad: </label>
                     {{ detalle.cantidad }}
                     <label>| Subtotal: </label>
