@@ -23,6 +23,20 @@
       <li><strong>Tipo de Comprobante:</strong> {{ object.tipo_comprobante }}</li>
     </ul>
 
+<div class="block">
+        <h5><strong> Detalle de su Pedido: </strong></h5>
+        <div class="content">
+            <ul>
+              {% for detalle in detalles %}
+                <li>
+                  {{ detalle }}
+                    <label>| Cantidad: </label>
+                    {{ detalle.cantidad }}
+                </li>
+              {% endfor %}
+            </ul>
+        </div>
+    </div>
 &nbsp
     <ul >
     {% if object.estado == 'Entregado' %}

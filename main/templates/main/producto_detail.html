@@ -31,6 +31,7 @@
         </li>
         {% endif %}
     </div>
+&nbsp
     <div class="block">
         <a href="{% if user.is_authenticated %} {% url 'add-to-cart' product_pk=object.pk %} {% else %} {% endif %} " class='button {% if user.is_authenticated %} is-primary {% else %} is-danger {% endif %}' >
           Añadir al carrito
