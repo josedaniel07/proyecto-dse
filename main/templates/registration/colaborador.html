@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-
+<h3><strong> Una vez tenga su cuenta, los pedidos que se le asignen llegarán a su correo.</strong></h3>
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
