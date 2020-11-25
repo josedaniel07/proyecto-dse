@@ -25,4 +25,5 @@ urlpatterns = [
     path('pedidos/', views.PedidosListView.as_view(), name='pedido-list'),
     path('pedidos/<int:pk>', views.PedidoCliente.as_view(), name='pedido-cliente'),
     path('cancela/<int:pedido_pk>', views.cancelarPedido.as_view(), name='pedido-cancelado'),
+    path('aprueba/<int:pedido_pk>', views.confirmarPedido.as_view(), name='pedido-entregado'),
 ]

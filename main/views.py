@@ -8,12 +8,15 @@ from django.contrib import messages
 from .models import *
 from .forms import *
 from random import randint
+from datetime import date
+
 
 class HomePageView(TemplateView):
   template_name = "main/home.html"
   def get_context_data(self, **kwargs):
     context = super().get_context_data(**kwargs)
-    context['latest_products'] = Producto.objects.all()[:5]
+    context['latest_products'] = Producto.objects.all()[:4]
+    context['productos'] = Producto.objects.all()
     return context
 
 class ProductListView(ListView):
@@ -67,6 +70,12 @@ class ProveedorListView(ListView):
   model = Proveedor
 class ProveedorDetailView(DetailView):
   model = Proveedor
+  def get_context_data(self, **kwargs):
+    context = super().get_context_data(**kwargs)
+    context['productos'] = context['object'].producto_set.all()
+    return context
+
+
 class CategoriaListView(ListView):
   model = Categoria
 class CategoriaDetailView(DetailView):
@@ -98,19 +107,24 @@ class RegistrationViewCliente(FormView):
     documento_identidad = form.cleaned_data['documento_identidad']
     fecha_nacimiento = form.cleaned_data['fecha_nacimiento']
     genero = form.cleaned_data['genero']
-    user_profile = Profile.objects.create(user=user, documento_identidad=documento_identidad, fecha_nacimiento=fecha_nacimiento, estado="", genero=genero)
+    numero = form.cleaned_data['numero']
+    user_profile = Profile.objects.create(user=user, documento_identidad=documento_identidad, fecha_nacimiento=fecha_nacimiento, estado="", genero=genero,numero=numero)
     user_profile.save()
     # Create Cliente if needed
     ruc = form.cleaned_data['RUC']
-    cliente = Cliente.objects.create(user_profile=user_profile, RUC=ruc)
-    # Handle special attribute
     preferencias = form.cleaned_data['preferencias']
-    preferencias_set = Categoria.objects.filter(pk=preferencias.pk)
-    cliente.preferencias.set(preferencias_set)
-    cliente.save()
+    cliente = Cliente.objects.create(user_profile=user_profile, RUC=ruc, preferencias=preferencias)
     # Login the user
     login(self.request, user)
     return super().form_valid(form)
+
+  def clean_date_of_birth(self):
+    dob = self.cleaned_data['fecha_nacimiento']
+    today = date.today()
+    if (dob.year + 18, dob.month, dob.day) > (today.year, today.month, today.day):
+      raise forms.ValidationError('Debes ser mayor de 18 para poder registrate.')
+    return dob
+
 
 class RegistrationViewColaborador(FormView):
   template_name = 'registration/colaborador.html'
@@ -132,12 +146,12 @@ class RegistrationViewColaborador(FormView):
     fecha_nacimiento = form.cleaned_data['fecha_nacimiento']
     estado = form.cleaned_data['estado']
     genero = form.cleaned_data['genero']
-    user_profile = Profile.objects.create(user=user, documento_identidad=documento_identidad, fecha_nacimiento=fecha_nacimiento, estado=estado, genero=genero)
+    numero = form.cleaned_data['numero']
+    user_profile = Profile.objects.create(user=user, documento_identidad=documento_identidad, fecha_nacimiento=fecha_nacimiento, estado=estado, genero=genero, numero=numero)
     user_profile.save()
     # Create Colaborador if needed
-    numero = form.cleaned_data['numero']
     reputacion = form.cleaned_data['reputacion']
-    colaborador = Colaborador.objects.create(user_profile=user_profile, reputacion=reputacion, numero=numero)
+    colaborador = Colaborador.objects.create(user_profile=user_profile, reputacion=reputacion)
     # Handle special attribute
     cobertura_entrega = form.cleaned_data['cobertura_entrega']
     cobertura_entrega_set = Localizacion.objects.filter(pk=cobertura_entrega.pk)
@@ -220,15 +234,13 @@ class RemoveAllFromCartView(View):
 class PedidoDetailView(DetailView):
   model = Pedido
   template_name = 'main/pedido_detail.html'
-
   def get_object(self):
     # Obten el cliente
     user_profile = Profile.objects.get(user=self.request.user)
     cliente = Cliente.objects.get(user_profile=user_profile)
     # Obtén/Crea un/el pedido en proceso (EP) del usuario
-    pedido = Pedido.objects.get_or_create(cliente=cliente, estado='En Proceso')
+    pedido = Pedido.objects.get(cliente=cliente, estado='En Proceso')
     return pedido
-
   def get_context_data(self, **kwargs):
     context = super().get_context_data(**kwargs)
     context['detalles'] = context['object'].detallepedido_set.all()
@@ -292,7 +304,7 @@ class PedidoCliente(DetailView):
   template_name = 'main/pedido_cliente.html'
   def get_context_data(self, **kwargs):
     context = super().get_context_data(**kwargs)
-    context['detalles'] = context['object'].detallepedido_set.all()
+    context['detallespedido'] = context['object'].detallepedido_set.all()
     return context
 
 class cancelarPedido(View):
@@ -301,10 +313,24 @@ class cancelarPedido(View):
     user_profile = Profile.objects.get(user=request.user)
     cliente = Cliente.objects.get(user_profile=user_profile)
     pedidocod = Pedido.objects.get(pk=pedido_pk)
-    # Obtén el pedido que se queire cancelar
+    # Obtén el pedido que se quiere cancelar
     pedido = Pedido.objects.get(cliente=cliente, pk=pedidocod.pk)
     # Cambia el estado del pedido
     pedido.estado = 'Cancelado'
+    # Guardamos los cambios
+    pedido.save()
+    return redirect(request.META['HTTP_REFERER'])
+
+class confirmarPedido(View):
+  def get(self, request, pedido_pk):
+    # Obten el cliente
+    user_profile = Profile.objects.get(user=request.user)
+    cliente = Cliente.objects.get(user_profile=user_profile)
+    pedidocod = Pedido.objects.get(pk=pedido_pk)
+    # Obtén el pedido que se quiere cancelar
+    pedido = Pedido.objects.get(cliente=cliente, pk=pedidocod.pk)
+    # Cambia el estado del pedido
+    pedido.estado = 'Entregado'
     # Guardamos los cambios
     pedido.save()
     return redirect(request.META['HTTP_REFERER'])

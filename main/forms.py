@@ -21,6 +21,7 @@ class ClienteUserForm(UserCreationForm):
         (NO_BINARIO, 'No Binario')
     ]
     genero = forms.ChoiceField(choices=GENERO_CHOICES)
+    numero = forms.CharField(max_length=9)
     # Cliente attributes
     RUC = forms.CharField(max_length=11, required=False)
     preferencias = forms.ModelChoiceField(queryset=Categoria.objects.all(), required=False)
@@ -31,12 +32,14 @@ class ClienteUserForm(UserCreationForm):
             'first_name',
             'last_name',
             'email',
+            'numero',
             'documento_identidad',
             'fecha_nacimiento',
             'genero',
             'RUC',
             'preferencias',
         ]
+
 
 
 class ColaboradorUserForm(UserCreationForm):
@@ -58,10 +61,11 @@ class ColaboradorUserForm(UserCreationForm):
         (NO_BINARIO, 'No Binario')
     ]
     genero = forms.ChoiceField(choices=GENERO_CHOICES)
+    numero = forms.CharField(max_length=9)
     # Colaborador attributes
     reputacion = forms.FloatField(required=False)
     cobertura_entrega = forms.ModelChoiceField(queryset=Localizacion.objects.all(), required=False)
-    numero = forms.CharField(max_length=9)
+
     class Meta:
         model = User
         fields = [

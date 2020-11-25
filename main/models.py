@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+
 import datetime
 
 # Create your models here.
@@ -56,6 +57,7 @@ class Profile(models.Model):
     documento_identidad = models.CharField(max_length=8)
     fecha_nacimiento = models.DateField(blank=True)
     estado = models.CharField(max_length=3, blank=True, null=True)
+    numero = models.CharField(max_length=9, null=False)
     ## Opciones de genero
     MASCULINO = 'MA'
     FEMENINO = 'FE'
@@ -74,7 +76,7 @@ class Cliente(models.Model):
     # Relacion con el modelo Perfil
     user_profile = models.OneToOneField(Profile, on_delete=models.CASCADE)
     # Atributos especificos del Cliente
-    preferencias = models.ManyToManyField(to='Categoria')
+    preferencias = models.ForeignKey('Categoria', on_delete=models.SET_NULL,null=True)
     RUC = models.CharField(max_length=11, null=True, blank=True)
     def __str__(self):
         return f'Cliente: {self.user_profile.user.get_username()}'
@@ -85,7 +87,7 @@ class Colaborador(models.Model):
     # Atributos especificos del Colaborador
     reputacion = models.FloatField()
     cobertura_entrega = models.ManyToManyField(to='Localizacion')
-    numero = models.CharField(max_length=9, null=True)
+
     def __str__(self):
         return f'Colaborador: {self.user_profile.user.get_username()}'
 

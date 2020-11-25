@@ -4,7 +4,7 @@
     <h3 class="title"> Pedido con el código: {{ object.pk}} </h3>
     <ul>
       <li><strong>Repartidor:</strong> {{ object.repartidor.user_profile.user.get_full_name }} </li>
-      <li><strong>Número del Repartidor:</strong> {{ object.repartidor.numero }}</li>
+      <li><strong>Número del Repartidor:</strong> {{ object.repartidor.user_profile.numero }}</li>
       <li><strong>Distrito:</strong> {{ object.localizacion.distrito }}</li>
       <li><strong>Dirección de Entrega:</strong> {{ object.dirección_entrega }}</li>
       <li><strong>Fecha de Creación:</strong> {{ object.fecha_creacion }}</li>
@@ -27,7 +27,7 @@
         <h5><strong> Detalle de su Pedido: </strong></h5>
         <div class="content">
             <ul>
-              {% for detalle in detalles %}
+              {% for detalle in detallespedido %}
                 <li>
                   {{ detalle }}
                     <label>| Cantidad: </label>
@@ -40,18 +40,35 @@
 &nbsp
     <ul >
     {% if object.estado == 'Entregado' %}
-        <li>No puedes cancelar un pedido entregado</li>
+        <li></li>
     {% elif object.estado == 'Cancelado' %}
-        <li>Recuerde llamar a Atención al Cliente para coordinar el reembolso del pedido.</li>
+        <li>Recuerde llamar a Atención al Cliente para coordinar el reembolso de su pedido.</li>
     {% else %}
      <a href="{% url 'pedido-cancelado' pedido.pk %}" class="button is-danger is-rounded ">
      Cancela tu pedido
      </a>
     {% endif %}
     </ul>
+&nbsp
+    <ul >
+    {% if object.estado == 'Entregado' %}
+        <li>Esperamos que disfrutes tu pedido. Recuerde que para las devoluciones debe acercarse directamente a las oficinias de Linio Express</li>
+    {% elif object.estado == 'Cancelado' %}
+        <li></li>
+    {% elif object.estado == 'En Proceso' %}
+        <li></li>
+    {% else %}
+     <a href="{% url 'pedido-entregado' pedido.pk %}" class="button is-primary is-rounded ">
+     Confirmar Entrega de tu Pedido
+     </a>
+    {% endif %}
+    </ul>
     <hr>
 <ul>
             Atención al cliente: 990154244
+        </ul>
+<ul>
+            Dirección de Oficinas Linio Express: Av. Comercios 154
         </ul>
     <ul>
       <li><a href="{% url 'pedido-list' %}">Ver Lista de tus Pedidos</a></li>
