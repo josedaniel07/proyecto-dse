@@ -39,6 +39,8 @@
                   {{ detalle.get_subtotal }}
                     <label>$</label>
                 </li>
+              {% empty %}
+                <hr3>No tienes productos en tu carrito</hr3>
               {% endfor %}
             </ul>
         </div>

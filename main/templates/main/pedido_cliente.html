@@ -33,6 +33,8 @@
                     <label>| Cantidad: </label>
                     {{ detalle.cantidad }}
                 </li>
+                {% empty %}
+                <hr3>No tienes productos en tu carrito</hr3>
               {% endfor %}
             </ul>
         </div>
