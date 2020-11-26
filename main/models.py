@@ -98,7 +98,7 @@ class Pedido(models.Model):
     localizacion = models.ForeignKey('Localizacion', on_delete=models.SET_NULL, null=True)
 
     # Atributos
-    fecha_creacion = models.DateTimeField(auto_now=True)
+    fecha_creacion = models.DateTimeField(blank=True, null=True)
     fecha_entrega = models.DateTimeField(blank=True, null=True)
     estado = models.CharField(max_length=10)
     direccion_entrega = models.CharField(max_length=100, blank=True, null=True)

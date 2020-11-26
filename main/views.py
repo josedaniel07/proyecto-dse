@@ -9,6 +9,7 @@ from .models import *
 from .forms import *
 from random import randint
 from datetime import date
+import pytz
 
 
 class HomePageView(TemplateView):
@@ -171,6 +172,7 @@ class AddToCartView(View):
     producto = Producto.objects.get(pk=product_pk)
     # Obtén/Crea un/el pedido en proceso (EP) del usuario
     pedido, _ = Pedido.objects.get_or_create(cliente=cliente, estado='En Proceso', tarifa=0)
+    pedido.fecha_creacion = datetime.datetime.now()
     # Obtén/Crea un/el detalle de pedido
     detalle_pedido, created = DetallePedido.objects.get_or_create(
       producto=producto,
@@ -240,6 +242,8 @@ class PedidoDetailView(DetailView):
     cliente = Cliente.objects.get(user_profile=user_profile)
     # Obtén/Crea un/el pedido en proceso (EP) del usuario
     pedido, existe = Pedido.objects.get_or_create(cliente=cliente, estado='En Proceso')
+    pedido.fecha_creacion = datetime.datetime.now()
+    pedido.save()
     return pedido
   def get_context_data(self, **kwargs):
     context = super().get_context_data(**kwargs)
@@ -331,6 +335,7 @@ class confirmarPedido(View):
     pedido = Pedido.objects.get(cliente=cliente, pk=pedidocod.pk)
     # Cambia el estado del pedido
     pedido.estado = 'Entregado'
+    pedido.fecha_entrega = datetime.datetime.now()
     # Guardamos los cambios
     pedido.save()
     return redirect(request.META['HTTP_REFERER'])
