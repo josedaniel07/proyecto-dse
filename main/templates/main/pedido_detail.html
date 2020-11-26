@@ -45,9 +45,15 @@
             </ul>
         </div>
     </div>
-    <a href="{% url 'pedido-update' pk=object.pk %}" class='button is-info'>
+<div>
+    {% if detalles %}
+        <a href="{% url 'pedido-update' pk=object.pk %}" class='button is-info'>
       Checkout
     </a>
+    {% else %}
+    Agrega producto a tu carrito para poder continuar con el pedido.
+    {% endif %}
+</div>
     <hr>
     <div class="content">
         <ul>
