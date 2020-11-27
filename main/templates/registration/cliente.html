@@ -1,11 +1,149 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h3><strong> En caso no tenga un RUC no es necesario que lo inserte.</strong></h3>
+
 <form method="post">
     {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Registrate">
+
+    <div class="field">
+        <label class="label" for="id_username">Usuario:</label>
+        <div class="control">
+            <input class="input" required id="id_username" type="text" placeholder="Username" name="username">
+        </div>
+    </div>
+
+    <div class="field">
+        <label class="label" for="id_first_name">Nombres:</label>
+        <div class="control">
+            <input class="input" id="id_first_name" type="text" placeholder="First name" name="first_name">
+        </div>
+    </div>
+
+    <div class="field">
+        <label class="label" for="id_last_name">Apellidos:</label>
+        <div class="control">
+            <input class="input" id="id_last_name" type="text" placeholder="Last name" name="last_name">
+        </div>
+    </div>
+
+    <div class="field">
+        <label class="label" for="id_email">Email:</label>
+        <div class="control">
+            <input class="input" required id="id_email" type="email" placeholder="Email" name="email">
+        </div>
+    </div>
+
+    <div class="field">
+        <label class="label" for="id_documento_identidad">Documento de identidad:</label>
+        <div class="control">
+            <input class="input" id="id_documento_identidad" type="text" placeholder="DNI" name="documento_identidad" maxlength="8">
+        </div>
+    </div>
+
+    <div class="content">
+    <div class="columns">
+
+        <div class="column is-3">
+            <div class="field">
+                <label class="label" for="id_fecha_nacimiento">Fecha de nacimiento:</label>
+                <div class="control">
+                    <input class="input" id="id_fecha_nacimiento" type="text" name="fecha_nacimiento" placeholder="YYYY-MM-DD">
+                </div>
+            </div>
+        </div>
+
+        <div class="column is-narrow">
+            <div class="field">
+                <label class="label" for="id_genero">Género:</label>
+                <div class="control">
+                    <div class="select">
+                        <select name="genero" id="id_genero">
+                            <option value="MA">Masculino</option>
+                            <option value="FE">Femenino</option>
+                            <option value="NB">No Binario</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="column is-narrow">
+            <div class="field">
+                <label class="label" for="id_preferencias">Preferencias</label>
+                <div class="control">
+                    <div class="select">
+                        <select name="preferencias" id="id_preferencias">
+                                <option value="1">--</option>
+                            {% for preferencia in form.preferencias.field.queryset %}
+                                <option value="{{ forloop.counter }}">{{ preferencia }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    </div>
+
+    <div class="field">
+        <label class="label" for="id_numero">Número de contacto:</label>
+        <div class="control">
+            <input class="input" id="id_numero" type="text" placeholder="Número" name="numero" maxlength="9">
+        </div>
+    </div>
+
+    <div class="field">
+        <label class="label" for="id_ruc">RUC:</label>
+        <h3><strong> En caso no tenga un RUC no es necesario que lo inserte.</strong></h3>
+        <div class="control">
+            <input class="input" id="id_ruc" type="text" placeholder="RUC" name="RUC" maxlength="11">
+        </div>
+    </div>
+
+    <div class="field">
+        <label class="label" for="id_password">Contraseña:</label>
+        <div class="control">
+            <input class="input" id="id_password" type="password" placeholder="Password" name="password1">
+        </div>
+        <div class="content is-small">
+            <ul>
+                <li>Your password can’t be too similar to your other personal information.</li>
+                <li>Your password must contain at least 8 characters.</li>
+                <li>Your password can’t be a commonly used password.</li>
+                <li>Your password can’t be entirely numeric.</li>
+            </ul>
+        </div>
+
+        <label class="label" for="id_password2">Confirme su contraseña:</label>
+        <div class="control">
+            <input class="input" id="id_password2" type="password" placeholder="Confirm your password" name="password2">
+        </div>
+    </div>
+
+
+        <div class="field-body">
+            <div class="field">
+                <div class="control">
+                    <input style="background-color: #F6610D;" class="button is-link" type="submit" value="Registrarse">
+                    <input type="hidden" name="next" value="{% url 'home'%}">
+                </div>
+            </div>
+        </div>
+
+
 </form>
+
+<hr>
+
+<div class="mt-4">
+    <div class="level">
+        <div class="level-left">
+            <h2 class="subtitle is-6">
+                <a href="{% url 'home' %}">Inicio</a>
+            </h2>
+        </div>
+    </div>
+</div>
 
 {% endblock %}

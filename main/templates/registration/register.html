@@ -1,21 +1,40 @@
 {% extends "base.html" %}
 
 {% block content %}
-      &nbsp
+
+<section class="section">
     <div class="container">
-              &nbsp
-        <div class="columns is-centered">
-          <div class="column is-half">
-            <h1>Elige el tipo de cuenta que deseas</h1>
-                    &nbsp
-                    &nbsp
-            <a class="button is-link is-centered" href="/registro/cliente">Cliente</a>
-                    &nbsp
-            <a class="button is-link" href="/registro/colaborador">Repartidor</a>
-          </div>
+        <div class= "level-item has-text-centered">
+            <h1><strong>Elije el tipo de cuenta que deseas:</strong></h1>
         </div>
     </div>
-    <ul>
-        <li><a href="{% url 'home' %}">Inicio</a></li>
-    </ul>
+    <div class="mt-5">
+    <div class="level-item has-text-centered">
+        <div class="content">
+            <div class="columns">
+                <div class="column is-narrow">
+                    <a style="background-color: #F6610D;" class="button is-dark" href="{% url 'cliente' %}">Cliente</a>
+                </div>
+
+                <div class="column is-narrow">
+                    <a style="background-color: #F6610D;" class="button is-dark" href="{% url 'colaborador' %}">Repartidor</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</section>
+
+<hr>
+
+<div class="mt-4">
+    <div class="level">
+        <div class="level-left">
+            <h2 class="subtitle is-6">
+                <a href="{% url 'home' %}">Inicio</a>
+            </h2>
+        </div>
+    </div>
+</div>
+
 {% endblock %}
