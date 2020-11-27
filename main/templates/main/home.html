@@ -2,6 +2,10 @@
 
 {% block content %}
 &nbsp
+{% if cliente.user_profile.user.is_authenticated %}
+hola cliente
+{% else %}
+{% endif %}
     {% if user.is_authenticated %}
     <h3> Hola {{ user.get_username }} </h3>
     <ul>

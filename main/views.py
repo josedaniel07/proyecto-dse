@@ -9,7 +9,6 @@ from .models import *
 from .forms import *
 from random import randint
 from datetime import date
-import pytz
 
 
 class HomePageView(TemplateView):
@@ -118,14 +117,6 @@ class RegistrationViewCliente(FormView):
     # Login the user
     login(self.request, user)
     return super().form_valid(form)
-
-  def clean_date_of_birth(self):
-    dob = self.cleaned_data['fecha_nacimiento']
-    today = date.today()
-    if (dob.year + 18, dob.month, dob.day) > (today.year, today.month, today.day):
-      raise forms.ValidationError('Debes ser mayor de 18 para poder registrate.')
-    return dob
-
 
 class RegistrationViewColaborador(FormView):
   template_name = 'registration/colaborador.html'
