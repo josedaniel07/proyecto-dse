@@ -3,6 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from .models import Localizacion, Categoria
 
+
 class ClienteUserForm(UserCreationForm):
     # django.contrib.auth.User attributes
     first_name = forms.CharField(max_length=150, required=False)

@@ -6,7 +6,7 @@
       <li><strong>Repartidor:</strong> {{ object.repartidor.user_profile.user.get_full_name }} </li>
       <li><strong>Número del Repartidor:</strong> {{ object.repartidor.user_profile.numero }}</li>
       <li><strong>Distrito:</strong> {{ object.localizacion.distrito }}</li>
-      <li><strong>Dirección de Entrega:</strong> {{ object.dirección_entrega }}</li>
+      <li><strong>Dirección de Entrega:</strong> {{ object.direccion_entrega }}</li>
       <li><strong>Fecha de Creación:</strong> {{ object.fecha_creacion }}</li>
         {% if object.fecha_entrega is None%}
             <li><strong>Fecha de Entrega:</strong> Pendiente de entrega</li>
